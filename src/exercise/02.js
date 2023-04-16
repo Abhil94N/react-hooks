@@ -3,26 +3,36 @@
 
 import React, {useEffect, useState} from 'react'
 
-function Greeting({initialName = ''}) {
-  // 🐨 initialize the state to the value from localStorage
-  // 💰 window.localStorage.getItem('name') ?? initialName
-  console.log('rendering')
+// custom hooks must start with 'use' and uses other hooks inside of it
+function useLocalStorageWithState(key, defaultValue = '') {
   //passing function makes it cheap
-  const [name, setName] = useState(() => {
-      console.log('get initial value')
-      return window.localStorage.getItem('name') || initialName 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [state, setState] = useState(() => {
+    console.log('get default value')
+    return window.localStorage.getItem(key) || defaultValue 
     }
   )
 
   // 🐨 Here's where you'll use `React.useEffect`.
   // The callback should set the `name` in localStorage.
   // 💰 window.localStorage.setItem('name', name)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     console.log('use effect')
-    window.localStorage.setItem('name', name)
+    window.localStorage.setItem(key, state)
 
-  }, [name])
+  }, [state])
 
+  return [state, setState]
+
+}
+
+function Greeting({initialName = ''}) {
+  // 🐨 initialize the state to the value from localStorage
+  // 💰 window.localStorage.getItem('name') ?? initialName
+  console.log('rendering')
+
+  const [name, setName] = useLocalStorageWithState('name',initialName)
   function handleChange(event) {
     setName(event.target.value)
   }
