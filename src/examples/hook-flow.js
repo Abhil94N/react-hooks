@@ -11,6 +11,7 @@ import * as React from 'react'
 function Child() {
   console.log('%c    Child: render start', 'color: MediumSpringGreen')
 
+  //lazy initializer due to it being a function
   const [count, setCount] = React.useState(() => {
     console.log('%c    Child: useState(() => 0)', 'color: tomato')
     return 0
@@ -62,7 +63,7 @@ function Child() {
 
 function App() {
   console.log('%cApp: render start', 'color: MediumSpringGreen')
-
+  // initial lazy initializer
   const [showChild, setShowChild] = React.useState(() => {
     console.log('%cApp: useState(() => false)', 'color: tomato')
     return false
