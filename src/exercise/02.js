@@ -9,17 +9,19 @@ function Greeting({initialName = ''}) {
   console.log('rendering')
   //passing function makes it cheap
   const [name, setName] = useState(() => {
-    console.log('get initial value')
-    return window.localStorage.getItem('name') || initialName }
+      console.log('get initial value')
+      return window.localStorage.getItem('name') || initialName 
+    }
   )
 
   // 🐨 Here's where you'll use `React.useEffect`.
   // The callback should set the `name` in localStorage.
   // 💰 window.localStorage.setItem('name', name)
   useEffect(() => {
+    console.log('use effect')
     window.localStorage.setItem('name', name)
 
-  })
+  }, [name])
 
   function handleChange(event) {
     setName(event.target.value)
@@ -36,7 +38,8 @@ function Greeting({initialName = ''}) {
 }
 
 function App() {
-  return <Greeting initialName="James" />
+  const [count, setCount] = useState(0)
+  return <><button onClick={() => setCount(previousCount => previousCount + 1)}>{count}</button><Greeting initialName="James" /></>
 }
 
 export default App
