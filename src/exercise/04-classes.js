@@ -2,7 +2,8 @@
 // 💯 (alternate) migrate from classes
 // http://localhost:3000/isolated/exercise/04-classes.js
 
-import React, {useState, useEffect} from 'react'
+import * as React from 'react'
+import { useLocalStorageState } from '../utils'
 
 // If you'd rather practice refactoring a class component to a function
 // component with hooks, then go ahead and do this exercise.
@@ -11,12 +12,8 @@ import React, {useState, useEffect} from 'react'
 // component to hooks. So, let's make it happen!
 
 function Board() {
-  const [squares, setSquares] = useState(() => JSON.parse(window.localStorage.getItem('squares')) || Array(9).fill(null))
+  const [squares, setSquares] = useLocalStorageState('squares',Array(9).fill(null))
   
-  useEffect(() => {
-    window.localStorage.setItem('squares', JSON.stringify(squares))
-  // update local storage if squares change
-  }, [squares])
 
   function selectSquare(square) {
 
