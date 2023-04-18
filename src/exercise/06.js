@@ -9,11 +9,15 @@ import React, {useState, useEffect} from 'react'
 import {PokemonDataView, PokemonForm, PokemonInfoFallback, fetchPokemon} from '../pokemon'
 
 function PokemonInfo({pokemonName}) {
-  const [status, setStatus] = useState('idle')
-  // 🐨 Have state for the pokemon (null)
-  const [pokemon, setPokemon] = useState(null)
 
-  const [error, setError] = useState(null)
+  const [{status, pokemon, error}, setState] = useState({
+    status: 'idle',
+    pokemon: null,
+    error: null,
+  })
+  // state updates to new object when called
+  console.log({status, pokemon, error})
+
   // 🐨 use React.useEffect where the callback should be called whenever the
   // pokemon name changes.
   // 💰 DON'T FORGET THE DEPENDENCIES ARRAY!
@@ -30,16 +34,13 @@ function PokemonInfo({pokemonName}) {
       return
     }
     // reset to loading state before fetching
-    setStatus('pending')
-    setError(null)
+    setState({status: 'pending'})
     fetchPokemon(pokemonName).then(
       pokemon => {
-        setPokemon(pokemon)
-        setStatus('resolved')
+        setState({pokemon,status: 'resolved'})
        },
       error => {
-        setError(error)
-        setStatus('rejected')
+        setState({error, status: 'rejected'})
       }
     )
   }, [pokemonName])
