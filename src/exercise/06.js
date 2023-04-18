@@ -11,6 +11,8 @@ import {PokemonDataView, PokemonForm, PokemonInfoFallback, fetchPokemon} from '.
 function PokemonInfo({pokemonName}) {
   // 🐨 Have state for the pokemon (null)
   const [pokemon, setPokemon] = useState(null)
+
+  const [error, setError] = useState(null)
   // 🐨 use React.useEffect where the callback should be called whenever the
   // pokemon name changes.
   // 💰 DON'T FORGET THE DEPENDENCIES ARRAY!
@@ -28,10 +30,22 @@ function PokemonInfo({pokemonName}) {
     }
     // reset to loading state before fetching
     setPokemon(null)
-    fetchPokemon(pokemonName).then(pokemonData => {
-      setPokemon(pokemonData)
-    })
+    setError(null)
+    fetchPokemon(pokemonName).then(
+      pokemon => setPokemon(pokemon),
+      error => setError(error),
+    )
   }, [pokemonName])
+
+  if (error) {
+    return (
+      <div role="alert">
+        There was an error: {' '}
+        <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+      </div>
+    )
+  }
+
   // 🐨 return the following things based on the `pokemon` state and `pokemonName` prop:
   //   1. no pokemonName: 'Submit a pokemon'
   //   2. pokemonName but no pokemon: <PokemonInfoFallback name={pokemonName} />
