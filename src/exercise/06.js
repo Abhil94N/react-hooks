@@ -94,7 +94,7 @@ function handleReset() {
       <hr />
       <div className="pokemon-info">
         {/* key prop unmounts and reounts using key */}
-        <ErrorBoundary FallbackComponent={ErrorFallBack} onReset={handleReset}>
+        <ErrorBoundary FallbackComponent={ErrorFallBack} onReset={handleReset} resetKeys={[pokemonName]}>
           <PokemonInfo pokemonName={pokemonName} />
         </ErrorBoundary>
         
