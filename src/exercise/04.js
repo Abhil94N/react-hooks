@@ -1,11 +1,11 @@
 // useState: tic tac toe
 // http://localhost:3000/isolated/exercise/04.js
 
-import React, {useState} from 'react'
-// import {useLocalStorageState} from '../utils'
+import * as React from 'react'
+import {useLocalStorageState} from '../utils'
 
 function Board({onClick, squares}) {
-
+  
   function renderSquare(i) {
     return (
       <button className="square" onClick={() => onClick(i)}>
@@ -43,9 +43,9 @@ function Game() {
   const initialSquares = Array(9).fill(null)
 
   //current step
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useLocalStorageState('tik-tac-toe:step',0)
   // array of arrays to map history
-  const [history, setHistory] = useState([initialSquares])
+  const [history, setHistory] = useLocalStorageState('tic-tac-toe:history',[initialSquares])
 
   //squares managed by current step in history
   const currentSquares = history[currentStep]
