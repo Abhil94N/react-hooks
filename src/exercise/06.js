@@ -8,6 +8,25 @@ import React, {useState, useEffect} from 'react'
 // PokemonDataView: the stuff we use to display the pokemon info
 import {PokemonDataView, PokemonForm, PokemonInfoFallback, fetchPokemon} from '../pokemon'
 
+class ErrorBoundary extends React.Component {
+  state = {error: null}
+  static getDerivedStateFromError(error) {
+    return {error}
+  }
+
+  // equivalent of body of function component
+  render() {
+    const {error} = this.state
+    if (error) {
+      // generic use of fallback to pass into errors
+      return <this.props.FallbackComponent error />
+    }
+    console.log('Error Boundary', this.state.error)
+    return this.props.children
+
+  }
+}
+
 function PokemonInfo({pokemonName}) {
 
   const [{status, pokemon, error}, setState] = useState({
@@ -49,12 +68,8 @@ function PokemonInfo({pokemonName}) {
   } else if (status === 'pending') {
     return <PokemonInfoFallback name={pokemonName}/>
   } else if (status === 'rejected') {
-    return (
-      <div role="alert">
-        There was an error: {' '}
-        <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
-      </div>
-    ) 
+    // error handled by error boundary
+    throw error
   } else if (status === 'resolved') {
     return <PokemonDataView pokemon={pokemon} />
   }
@@ -65,6 +80,16 @@ function PokemonInfo({pokemonName}) {
   //   3. pokemon: <PokemonDataView pokemon={pokemon} />
 
   throw new Error('this should be impossible')
+}
+
+// fallback error
+function ErrorFallBack({error}) {
+  return (
+    <div role="alert">
+      There was an error: {' '}
+      <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+    </div>
+  ) 
 }
 
 function App() {
@@ -79,7 +104,10 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <PokemonInfo pokemonName={pokemonName} />
+        <ErrorBoundary FallbackComponent={ErrorFallBack}>
+          <PokemonInfo pokemonName={pokemonName} />
+        </ErrorBoundary>
+        
       </div>
     </div>
   )
