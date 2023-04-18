@@ -104,7 +104,8 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        {/* key prop unmounts and reounts using key */}
+        <ErrorBoundary key={pokemonName} FallbackComponent={ErrorFallBack}>
           <PokemonInfo pokemonName={pokemonName} />
         </ErrorBoundary>
         
